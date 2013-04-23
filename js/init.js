@@ -82,6 +82,8 @@ scene.add(pointLight);
 function render() {
   requestAnimationFrame(render);
 
+  utils.enableDebug();
+
   camera.lookAt(barrel.position);
 
   /* Spin me 'round' */
@@ -91,4 +93,3 @@ function render() {
   renderer.render(scene, camera);
 }
 render();
-utils.enableDebug();

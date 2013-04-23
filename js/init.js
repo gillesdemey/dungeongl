@@ -58,7 +58,6 @@ CONTAINER.appendChild(renderer.domElement);
 /* --- Add custom models --- */
 scene.add(barrel = new models.Barrel());
 scene.add(crate = new models.Crate());
-utils.enableDebug(crate);
 
 /* This camera is now a child of the barrel and will always look at it, and spin around with it */
 //barrel.add(camera);
@@ -92,3 +91,4 @@ function render() {
   renderer.render(scene, camera);
 }
 render();
+utils.enableDebug();

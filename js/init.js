@@ -47,9 +47,6 @@ scene.add(selectionAxis);
 var intersectionPlane = new THREE.Mesh( new THREE.PlaneGeometry( 5000, 5000 ) );
 scene.add( intersectionPlane );
 
-/* TODO: tets camera */
-//scene.add(camera);
-
 /* Attach the render-supplied DOM element */
 CONTAINER.appendChild(renderer.domElement);
 
@@ -60,7 +57,7 @@ scene.add(barrel = new models.Barrel());
 scene.add(crate = new models.Crate());
 
 /* This camera is now a child of the barrel and will always look at it, and spin around with it */
-//barrel.add(camera);
+barrel.add(camera);
 
 crate.position.x = 1;
 
@@ -78,18 +75,19 @@ pointLight.position.z = 130;
 // add to the scene
 scene.add(pointLight);
 
+var i = 0;
+
 /* Render loop */
 function render() {
   requestAnimationFrame(render);
 
-  utils.enableDebug();
-
   camera.lookAt(barrel.position);
 
   /* Spin me 'round' */
-  //barrel.rotation.y -= 0.03;
   crate.rotation.y += 0.04;
 
   renderer.render(scene, camera);
 }
+/* enable debugging */
+utils.enableDebug(scene);
 render();

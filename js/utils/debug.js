@@ -1,67 +1,75 @@
-/* Utils namespace */
+/* utils namespace */
 var utils = utils || {};
 
 utils.enableDebug = function( object ) {
 
   if ( typeof object === 'undefined' ) {
+    throw new Error("Invalid argument");
+  }
 
-    for ( var i = scene.children.length - 1; i >= 0; i-- ) {
-
-      object = scene.children[i];
-
-      if ( object instanceof THREE.Mesh ) {
-        utils.enableDebug( object );
-      }
-
+  /* object is a scene, enable for all meshes */
+  if ( object instanceof THREE.Scene ) {
+    if ( utils.hasChildrenOfInstance(object, THREE.Mesh) ) {
+      object.children.forEach( function( child ) {
+        utils.enableDebug( child );
+      });
+      return;
     }
-  } else {
+  }
 
-    this.hasDebug = false;
+  /* object is a mesh */
+  if ( object instanceof THREE.Mesh ) {
 
-    for ( var i = object.children.length - 1; i >= 0; i-- ) {
+    /* Add axis helper */
+    object.add(new THREE.AxisHelper());
 
-      if ( object.children[i] instanceof THREE.AxisHelper || object.children[i] instanceof THREE.BoxHelper ) {
-          this.hasDebug = true;
-          return;
-      }
-    }
-
-    if ( this.hasDebug === false ) {
-
-      /* Add axis helper */
-      object.add(new THREE.AxisHelper());
-
-      /* Add selectionBox */
-      var selectionBox = new THREE.BoxHelper();
-      selectionBox.material.color.setHex( 0xffff00 );
-      selectionBox.material.transparent = true;
-      selectionBox.update( object );
-      object.add( selectionBox );
-    }
+    /* Add selectionBox */
+    var selectionBox = new THREE.BoxHelper();
+    selectionBox.material.color.setHex( 0xffff00 );
+    selectionBox.material.transparent = true;
+    selectionBox.update( object );
+    object.add( selectionBox );
 
   }
+
+  /* TODO: Set a GridHelper for the scene */
+
 };
 
 utils.disableDebug = function( object ) {
 
-  /* TODO: remove all when no object given */
-
   if ( typeof object === 'undefined' ) {
-    for ( var i = scene.children.length - 1; i >= 0; i-- ) {
-
-      object = scene.children[i];
-
-      if ( object instanceof THREE.Mesh ) {
-        utils.disableDebug( object );
-      }
-    }
-  } else {
-
-    for ( var i = object.children.length - 1; i >= 0; i-- ) {
-      if ( object.children[i] instanceof THREE.BoxHelper || object.children[i] instanceof THREE.AxisHelper ) {
-        object.remove( object.children[i] );
-      }
-    }
-
+    throw new Error("No argument supplied");
   }
+
+  if ( object instanceof THREE.Scene ) {
+
+    object.children.forEach( function(child) {
+      if ( child instanceof THREE.Mesh ) {
+        utils.disableDebug( child );
+      }
+
+    });
+  }
+
+  if ( object instanceof THREE.Mesh ) {
+    /* forEach() bug here */
+    for (var i = object.children.length - 1; i >= 0; i--) {
+      child = object.children[i];
+      if ( child instanceof THREE.AxisHelper || child instanceof THREE.BoxHelper ) {
+        object.remove(child);
+      }
+    }
+  }
+
+};
+
+utils.hasChildrenOfInstance = function(object, instance_name) {
+  var bool = false;
+  object.children.forEach( function( child ) {
+    if ( child instanceof instance_name ) {
+      bool = true;
+    }
+  });
+  return bool;
 };

@@ -16,5 +16,19 @@ models.Crate = function() {
 
   crate.overdraw = true;
 
+  crate.jump = function() {
+
+    function render() {
+      requestAnimationFrame(render);
+          // speed  // 0 to 1
+      i = (i + 0.1) % Math.PI;
+                          // height
+      crate.position.y =  Math.sin( i ) / 3;
+      renderer.render(scene, camera);
+    }
+    render();
+
+  };
+
   return crate;
 };

@@ -1,7 +1,7 @@
-/* utils namespace */
-var utils = utils || {};
+/* Utils namespace */
+THREE.utils = THREE.utils || {};
 
-utils.enableDebug = function( object ) {
+THREE.utils.enableDebug = function( object ) {
 
   if ( typeof object === 'undefined' ) {
     throw new Error("Invalid argument");
@@ -9,9 +9,9 @@ utils.enableDebug = function( object ) {
 
   /* object is a scene, enable for all meshes */
   if ( object instanceof THREE.Scene ) {
-    if ( utils.hasChildrenOfInstance(object, THREE.Mesh) ) {
+    if ( this.hasChildrenOfInstance(object, THREE.Mesh) ) {
       object.children.forEach( function( child ) {
-        utils.enableDebug( child );
+        THREE.utils.enableDebug( child );
       });
       return;
     }
@@ -36,7 +36,7 @@ utils.enableDebug = function( object ) {
 
 };
 
-utils.disableDebug = function( object ) {
+THREE.utils.disableDebug = function( object ) {
 
   if ( typeof object === 'undefined' ) {
     throw new Error("No argument supplied");
@@ -46,7 +46,7 @@ utils.disableDebug = function( object ) {
 
     object.children.forEach( function(child) {
       if ( child instanceof THREE.Mesh ) {
-        utils.disableDebug( child );
+        THREE.utils.disableDebug( child );
       }
 
     });
@@ -64,7 +64,7 @@ utils.disableDebug = function( object ) {
 
 };
 
-utils.hasChildrenOfInstance = function(object, instance_name) {
+THREE.utils.hasChildrenOfInstance = function(object, instance_name) {
   var bool = false;
   object.children.forEach( function( child ) {
     if ( child instanceof instance_name ) {

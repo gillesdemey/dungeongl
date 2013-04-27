@@ -1,8 +1,9 @@
-/* Models namespace */
-var models = models || {};
+/* Namespaces */
+var Game = Game || {};
+Game.models = Game.models || {};
 
 // Barrel
-models.Barrel = function() {
+Game.models.Barrel = function() {
 
   this.SECTION = 0.4;
   this.HEIGHT = 1;

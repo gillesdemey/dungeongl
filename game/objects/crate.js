@@ -1,32 +1,41 @@
-/* Models namespace */
-var models = models || {};
+/* Namespaces */
+var Game = Game || {};
+Game.models = Game.models || {};
 
-models.Crate = function() {
+Game.models.Crate = function(width, height, depth) {
 
-  this.WIDTH = 0.6;
-  this.HEIGHT = 0.6;
-  this.DEPTH = 0.6;
+  /* Private properties with default values */
+  width   =   typeof width  === 'undefined' ? 0.6 : width;
+  height  =   typeof height === 'undefined' ? 0.6 : height;
+  depth   =   typeof depth  === 'undefined' ? 0.6 : depth;
 
-  var crate = new THREE.Mesh(
-    new THREE.CubeGeometry(this.WIDTH, this.HEIGHT, this.DEPTH),
+  /* Set the geometry */
+  this.setGeometry(
+    new THREE.CubeGeometry(width, height, depth)
+  );
+
+  /* Set the material */
+  this.setMaterial(
     new THREE.MeshLambertMaterial({
       map: THREE.ImageUtils.loadTexture('game/textures/crate.jpg')
     })
   );
 
-  crate.overdraw = true;
+  return this;
 
-  crate.jump = function() {
-    function render() {
-      requestAnimationFrame(render);
-          // speed  // 0 to 1
-      i = (i + 0.1) % Math.PI;
-                          // height
-      crate.position.y =  Math.sin( i ) / 1.5;
-      renderer.render(scene, camera);
-    }
-    render();
-  };
+};
 
-  return crate;
+/* Inherit from THREE.Mesh */
+Game.models.Crate.prototype = new THREE.Mesh();
+
+/* Jump function for Crate model */
+Game.models.Crate.prototype.jump = function() {
+  function jump() {
+    requestAnimationFrame(jump);
+        // speed  // 0 to 1
+    i = (i + 0.1) % Math.PI;
+                        // height
+    crate.position.y =  Math.sin( i ) / 1.5;
+  }
+  jump();
 };

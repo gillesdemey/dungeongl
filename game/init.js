@@ -2,6 +2,9 @@
  * Setting up a basic scene, and a camera
  */
 
+/* Namespaces */
+var Game = Game || {};
+
 /* Scene size */
 var SCENE_SETTINGS = {
   WIDTH : 800,
@@ -17,63 +20,63 @@ var CAMERA_SETTINGS = {
 var CONTAINER = document.getElementById("game");
 
 /* Renderer + configuration */
-var renderer = new THREE.WebGLRenderer();
-renderer.setSize(SCENE_SETTINGS.WIDTH, SCENE_SETTINGS.HEIGHT);
+Game.renderer = new THREE.WebGLRenderer();
+Game.renderer.setSize(SCENE_SETTINGS.WIDTH, SCENE_SETTINGS.HEIGHT);
 
 /* Camera + configuration */
-var camera = new THREE.PerspectiveCamera(
+Game.camera = new THREE.PerspectiveCamera(
   CAMERA_SETTINGS.VIEW_ANGLE,
   CAMERA_SETTINGS.ASPECT,
   CAMERA_SETTINGS.NEAR,
   CAMERA_SETTINGS.FAR);
 
 /* Camera position */
-camera.position.z = 3;
-camera.position.y = 2.5;
+Game.camera.position.z = 3;
+Game.camera.position.y = 2.5;
 
 /* Camera rotation */
 //camera.rotation.x = -45 * Math.PI / 180;
 
 /* Scene & Camera attaching */
-var scene = new THREE.Scene();
+Game.scene = new THREE.Scene();
 
 /* Helpers and debug stuff */
-var grid = new THREE.GridHelper( 500, 0.5 );
-scene.add(grid);
+Game.grid = new THREE.GridHelper( 500, 0.5 );
+Game.scene.add(Game.grid);
 
-var selectionAxis = new THREE.AxisHelper( 100 );
-scene.add(selectionAxis);
+Game.selectionAxis = new THREE.AxisHelper( 100 );
+Game.scene.add(Game.selectionAxis);
 
-var intersectionPlane = new THREE.Mesh( new THREE.PlaneGeometry( 5000, 5000 ) );
-scene.add( intersectionPlane );
+Game.intersectionPlane = new THREE.Mesh( new THREE.PlaneGeometry( 5000, 5000 ) );
+Game.scene.add( Game.intersectionPlane );
 
 /* Attach the render-supplied DOM element */
-CONTAINER.appendChild(renderer.domElement);
+CONTAINER.appendChild(Game.renderer.domElement);
 
 /* ----- ADDING MODELS ------ */
 
 /* --- Add custom models --- */
-scene.add(barrel = new models.Barrel());
-scene.add(crate = new models.Crate());
+Game.scene.add(barrel = new Game.models.Barrel());
+Game.scene.add(crate = new Game.models.Crate());
 
 /* This camera is now a child of the barrel and will always look at it, and spin around with it */
-barrel.add(camera);
+barrel.add(Game.camera);
 
 crate.position.x = 1;
 
 /* --- Lights please! --- */
 
 // create a point light
-var pointLight =
+Game.pointLight =
   new THREE.PointLight(0xFFFFFF);
 
 // set its position
-pointLight.position.x = 10;
-pointLight.position.y = 50;
-pointLight.position.z = 130;
+Game.pointLight.position.x = 10;
+Game.pointLight.position.y = 50;
+Game.pointLight.position.z = 130;
 
 // add to the scene
-scene.add(pointLight);
+Game.scene.add(Game.pointLight);
 
 var i = 0;
 
@@ -81,13 +84,13 @@ var i = 0;
 function render() {
   requestAnimationFrame(render);
 
-  camera.lookAt(barrel.position);
+  Game.camera.lookAt(barrel.position);
 
   /* Spin me 'round' */
   crate.rotation.y += 0.04;
 
-  renderer.render(scene, camera);
+  Game.renderer.render(Game.scene, Game.camera);
 }
 /* enable debugging */
-utils.enableDebug(scene);
+THREE.utils.enableDebug(Game.scene);
 render();
